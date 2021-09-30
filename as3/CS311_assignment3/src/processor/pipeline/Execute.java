@@ -19,6 +19,12 @@ public class Execute {
 	public void performEX()
 	{
 		//TODO
+
+		//get data from OF_EX_LATCH
+		int op1 = OF_EX_Latch.getOp1();
+		int op2 = OF_EX_Latch.getOp2();
+		int imm = OF_EX_Latch.getImm();
+		int branchTarget = OF_EX_Latch.getBranchTarget();
 	}
 
 }

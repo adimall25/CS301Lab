@@ -7,6 +7,7 @@ public class OF_EX_LatchType {
 	int op1;
 	int op2;
 	int imm;
+	int opcode;
 	
 	public OF_EX_LatchType()
 	{
@@ -41,6 +42,11 @@ public class OF_EX_LatchType {
 		this.imm = imm;
 	}
 
+	public void setOpcode(int opcode)
+	{
+		this.opcode = opcode;
+	}
+
 	public int getBranchTarget()
 	{
 		return branchTarget;
@@ -61,4 +67,8 @@ public class OF_EX_LatchType {
 		return this.imm;
 	}
 
+	public int getOpcode()
+	{
+		return this.opcode;
+	}
 }

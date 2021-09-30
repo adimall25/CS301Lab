@@ -70,6 +70,8 @@ public class OperandFetch {
 				op2 = containingProcessor.getRegisterFile().getValue(rs2);
 			}
 			
+			//set data on latch
+			OF_EX_Latch.setOpcode(opcode);
 			OF_EX_Latch.setBranchTarget(branchOffset);
 			OF_EX_Latch.setOp1(op1);
 			OF_EX_Latch.setOp1(op1);
