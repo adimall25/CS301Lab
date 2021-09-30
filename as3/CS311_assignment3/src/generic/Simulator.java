@@ -70,8 +70,10 @@ public class Simulator {
 	
 	public static void simulate()
 	{
+		int cnt = 0;
 		while(simulationComplete == false)
 		{
+			cnt++;
 			processor.getIFUnit().performIF();
 			Clock.incrementClock();
 			processor.getOFUnit().performOF();
@@ -86,6 +88,8 @@ public class Simulator {
 		
 		// TODO
 		// set statistics
+		Statistics.setNumberOfCycles(Clock.getCurrentTime());
+		Statistics.setNumberOfInstructions(cnt);
 	}
 	
 	public static void setSimulationComplete(boolean value)

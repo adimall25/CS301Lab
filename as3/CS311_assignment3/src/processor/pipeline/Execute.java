@@ -61,95 +61,97 @@ public class Execute {
 			if(isBranchTaken)
 			{
 				containingProcessor.getRegisterFile().setProgramCounter(branchTarget);
+				OF_EX_Latch.setEX_enable(false);
 			}
-
-
-			//ALU code
-			int A = op1;
-			int B = 0, aluResult = 0;
-
-			if((opcode <= 21 && opcode % 2 == 1))
+			else
 			{
-				B = imm;
-			}
-			else if(opcode <= 21 && opcode % 2 == 0)
-			{
-				B = op2;
-			}
-			else;
+				//ALU code
+				int A = op1;
+				int B = 0, aluResult = 0;
 
-			//calculate aluResult
-			switch(opcode)
-			{
-				case 0:
-				case 1:
-					aluResult = A + B;
-					break;
-				case 2:
-				case 3:
-					aluResult = A - B;
-					break;
-				case 4:
-				case 5:
-					aluResult = A*B;
-					break;
-				case 6:
-				case 7:
-					aluResult = A/B;
-					break;
-				case 8:
-				case 9:
-					aluResult = A&B;
-					break;
-				case 10:
-				case 11:
-					aluResult = A|B;
-					break;
-				case 12:
-				case 13:
-					aluResult = A^B;
-					break;
-				case 14:
-				case 15:
-					if(A < B)
-					{
-						aluResult = 1;
-					}
-					else
-					{
-						aluResult = 0;
-					}
-					break;
-				case 16:
-				case 17:
-					aluResult = A<<B;
-					break;
-				case 18:
-				case 19:
-					aluResult = A>>B;
-					break;
-				case 20:
-				case 21:
-					aluResult = A>>>B;
-					break;
-			}
+				if((opcode <= 21 && opcode % 2 == 1))
+				{
+					B = imm;
+				}
+				else if(opcode <= 21 && opcode % 2 == 0)
+				{
+					B = op2;
+				}
+				else;
 
-			if(opcode == 22)	//if load
-			{
-				aluResult = op1 + imm;
-			}
-			if(opcode == 23)	//if store
-			{
-				aluResult = op2 + imm;
-			}
+				//calculate aluResult
+				switch(opcode)
+				{
+					case 0:
+					case 1:
+						aluResult = A + B;
+						break;
+					case 2:
+					case 3:
+						aluResult = A - B;
+						break;
+					case 4:
+					case 5:
+						aluResult = A*B;
+						break;
+					case 6:
+					case 7:
+						aluResult = A/B;
+						break;
+					case 8:
+					case 9:
+						aluResult = A&B;
+						break;
+					case 10:
+					case 11:
+						aluResult = A|B;
+						break;
+					case 12:
+					case 13:
+						aluResult = A^B;
+						break;
+					case 14:
+					case 15:
+						if(A < B)
+						{
+							aluResult = 1;
+						}
+						else
+						{
+							aluResult = 0;
+						}
+						break;
+					case 16:
+					case 17:
+						aluResult = A<<B;
+						break;
+					case 18:
+					case 19:
+						aluResult = A>>B;
+						break;
+					case 20:
+					case 21:
+						aluResult = A>>>B;
+						break;
+				}
 
-			//set data from this stage to the next latch
-			EX_MA_Latch.setOpcode(opcode);
-			EX_MA_Latch.setAluResult(aluResult);
-			EX_MA_Latch.setOp2(op2);
-			EX_MA_Latch.setOp1(op1);
-			OF_EX_Latch.setEX_enable(false);
-			EX_MA_Latch.setMA_enable(true);
+				if(opcode == 22)	//if load
+				{
+					aluResult = op1 + imm;
+				}
+				if(opcode == 23)	//if store
+				{
+					aluResult = op2 + imm;
+				}
+
+				//set data from this stage to the next latch
+				EX_MA_Latch.setOpcode(opcode);
+				EX_MA_Latch.setAluResult(aluResult);
+				EX_MA_Latch.setOp2(op2);
+				EX_MA_Latch.setOp1(op1);
+				OF_EX_Latch.setEX_enable(false);
+				EX_MA_Latch.setMA_enable(true);
+			}
 		}
 	}
 		

@@ -5,8 +5,8 @@ import java.io.PrintWriter;
 public class Statistics {
 	
 	// TODO add your statistics here
-	static int numberOfInstructions;
-	static int numberOfCycles;
+	static long numberOfInstructions;
+	static long numberOfCycles;
 	
 
 	public static void printStatistics(String statFile)
@@ -29,11 +29,11 @@ public class Statistics {
 	}
 	
 	// TODO write functions to update statistics
-	public void setNumberOfInstructions(int numberOfInstructions) {
+	public static void setNumberOfInstructions(long numberOfInstructions) {
 		Statistics.numberOfInstructions = numberOfInstructions;
 	}
 
-	public void setNumberOfCycles(int numberOfCycles) {
+	public static void setNumberOfCycles(long numberOfCycles) {
 		Statistics.numberOfCycles = numberOfCycles;
 	}
 }
