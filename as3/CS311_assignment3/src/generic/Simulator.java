@@ -28,6 +28,7 @@ public class Simulator {
 		 *     x1 = 65535
 		 *     x2 = 65535
 		 */
+		
 	}
 	
 	public static void simulate()
