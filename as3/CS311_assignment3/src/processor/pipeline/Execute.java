@@ -23,6 +23,7 @@ public class Execute {
 		//get data from OF_EX_LATCH
 		if(OF_EX_Latch.isEX_enable())
 		{
+			int rs1 = OF_EX_Latch.getRs1(), rs2 = OF_EX_Latch.getRs2(), rd = OF_EX_Latch.getRd();
 			int op1 = OF_EX_Latch.getOp1();
 			int op2 = OF_EX_Latch.getOp2();
 			int imm = OF_EX_Latch.getImm();
@@ -146,6 +147,7 @@ public class Execute {
 			EX_MA_Latch.setOpcode(opcode);
 			EX_MA_Latch.setAluResult(aluResult);
 			EX_MA_Latch.setOp2(op2);
+			EX_MA_Latch.setOp1(op1);
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);
 		}

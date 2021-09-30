@@ -75,6 +75,9 @@ public class OperandFetch {
 
 			
 			//set data on latch
+			OF_EX_Latch.setRs1(rs1);
+			OF_EX_Latch.setRs2(rs2);
+			OF_EX_Latch.setRd(rd);
 			OF_EX_Latch.setOpcode(opcode);
 			OF_EX_Latch.setBranchTarget(branchTarget);
 			OF_EX_Latch.setOp1(op1);
