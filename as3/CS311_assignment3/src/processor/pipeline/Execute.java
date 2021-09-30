@@ -25,6 +25,40 @@ public class Execute {
 		int op2 = OF_EX_Latch.getOp2();
 		int imm = OF_EX_Latch.getImm();
 		int branchTarget = OF_EX_Latch.getBranchTarget();
+		int opcode = OF_EX_Latch.getOpcode();
+
+		boolean isUBranch = false;
+		boolean isBeq = false, isBgt = false, isBne = false, isBlt = false;
+		if(opcode == 24)	//if jmp	
+		{
+			isUBranch = true;
+		}
+
+		if(opcode == 25)	//if beq
+		{
+			if(op1 == op2)isBeq = true;
+		}
+		if(opcode == 26)	//if bne
+		{
+			if(op1 != op2)isBne = true;
+		}
+		if(opcode == 27)	//if blt
+		{
+			if(op1 < op2)isBlt = true;
+		}
+		if(opcode == 28)	//if bgt
+		{
+			if(op1 > op2)isBgt = true;
+		}
+
+		//is branch taken or not
+		boolean isBranchTaken = isBeq || isBne || isBlt || isBgt || isUBranch;
+
+		//if branch is taken then change PC
+		if(isBranchTaken)
+		{
+			containingProcessor.getRegisterFile().setProgramCounter(branchTarget);
+		}
 	}
 
 }

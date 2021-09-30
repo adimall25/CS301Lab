@@ -29,6 +29,7 @@ public class OperandFetch {
 			int immediate = bitExtracted(instruction, 16, 18);
 			int branchOffset = bitExtracted(instruction, 6, 27);
 			branchOffset = branchOffset * 4;
+			int branchTarget = containingProcessor.getRegisterFile().getProgramCounter() + branchOffset;
 
 			int rs1 = 0, rs2 = 0, rd = 0;
 			if(opcode <= 21 && opcode % 2 == 1)
@@ -72,7 +73,7 @@ public class OperandFetch {
 			
 			//set data on latch
 			OF_EX_Latch.setOpcode(opcode);
-			OF_EX_Latch.setBranchTarget(branchOffset);
+			OF_EX_Latch.setBranchTarget(branchTarget);
 			OF_EX_Latch.setOp1(op1);
 			OF_EX_Latch.setOp1(op1);
 			OF_EX_Latch.setImm(immediate);
