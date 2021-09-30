@@ -42,8 +42,9 @@ public class Simulator {
 			InputStream inputFile = new FileInputStream(assemblyProgramFile);
 			int intRead = 0;
 			byte[] b = new byte[4];
-			while((intRead = inputFile.read(b)) != -1)
+			while(inputFile.available() > 0)
 			{
+				intRead = inputFile.read(b);
 				ByteBuffer buff = ByteBuffer.wrap(b);
 				intRead = buff.getInt();
 				if(cnt == 0)pc = intRead;
