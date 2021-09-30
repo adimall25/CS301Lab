@@ -1,7 +1,14 @@
 package generic;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
 import processor.Clock;
 import processor.Processor;
+import processor.memorysystem.MainMemory;
 
 public class Simulator {
 		
@@ -28,6 +35,35 @@ public class Simulator {
 		 *     x1 = 65535
 		 *     x2 = 65535
 		 */
+		int pc = 0;
+		int cnt = 0;
+		try
+		{
+			InputStream inputFile = new FileInputStream(assemblyProgramFile);
+			int intRead = 0;
+			byte[] b = new byte[4];
+			while((intRead = inputFile.read(b)) != -1)
+			{
+				ByteBuffer buff = ByteBuffer.wrap(b);
+				intRead = buff.getInt();
+				if(cnt == 0)pc = intRead;
+				else 
+				{
+					// System.out.println(cnt);
+					processor.getMainMemory().setWord(cnt - 1, intRead);
+				}
+				cnt++;
+			}
+			processor.getRegisterFile().setValue(0, 0);
+			int temp = (int)Math.pow(2, 16) - 1;
+			processor.getRegisterFile().setValue(1, temp);
+			processor.getRegisterFile().setValue(2, temp);
+			processor.getRegisterFile().setProgramCounter(pc);
+		}
+		catch(IOException exc)
+		{
+			exc.printStackTrace();
+		}
 		
 	}
 	
