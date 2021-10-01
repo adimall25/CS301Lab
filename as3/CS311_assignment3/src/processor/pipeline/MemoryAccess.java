@@ -28,6 +28,7 @@ public class MemoryAccess {
 
 			if(opcode == 22)	//if load
 			{
+				// System.out.print(rs1)
 				containingProcessor.getRegisterFile().setValue(rd, containingProcessor.getMainMemory().getWord(aluResult));
 			}
 			if(opcode == 23)	//if store

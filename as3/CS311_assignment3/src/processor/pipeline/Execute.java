@@ -60,8 +60,11 @@ public class Execute {
 			//if branch is taken then change PC
 			if(isBranchTaken)
 			{
-				containingProcessor.getRegisterFile().setProgramCounter(branchTarget);
+				System.out.print("Branch target : ");
+				System.out.println(branchTarget - 1);
+				containingProcessor.getRegisterFile().setProgramCounter(branchTarget - 1);
 				OF_EX_Latch.setEX_enable(false);
+				EX_MA_Latch.setMA_enable(true);
 			}
 			else
 			{
@@ -97,6 +100,7 @@ public class Execute {
 					case 6:
 					case 7:
 						aluResult = A/B;
+						containingProcessor.getRegisterFile().setValue(31, A % B);
 						break;
 					case 8:
 					case 9:
@@ -149,6 +153,9 @@ public class Execute {
 				EX_MA_Latch.setAluResult(aluResult);
 				EX_MA_Latch.setOp2(op2);
 				EX_MA_Latch.setOp1(op1);
+				EX_MA_Latch.setRs1(rs1);
+				EX_MA_Latch.setRs2(rs2);
+				EX_MA_Latch.setRd(rd);
 				OF_EX_Latch.setEX_enable(false);
 				EX_MA_Latch.setMA_enable(true);
 			}

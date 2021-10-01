@@ -33,6 +33,7 @@ public class RegisterWrite {
 			if(opcode == 29)
 			{
 				MA_RW_Latch.setRW_enable(false);
+				IF_EnableLatch.setIF_enable(true);
 				Simulator.setSimulationComplete(true);
 			}
 			else

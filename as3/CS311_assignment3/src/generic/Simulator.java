@@ -59,7 +59,9 @@ public class Simulator {
 			int temp = (int)Math.pow(2, 16) - 1;
 			processor.getRegisterFile().setValue(1, temp);
 			processor.getRegisterFile().setValue(2, temp);
+			// System.out.println(processor.getRegisterFile().getValue(0));
 			processor.getRegisterFile().setProgramCounter(pc);
+			System.out.println(processor.getMainMemory().getContentsAsString(0, 9));
 		}
 		catch(IOException exc)
 		{
@@ -74,6 +76,7 @@ public class Simulator {
 		while(simulationComplete == false)
 		{
 			cnt++;
+			// System.out.println(cnt);
 			processor.getIFUnit().performIF();
 			Clock.incrementClock();
 			processor.getOFUnit().performOF();
@@ -84,6 +87,12 @@ public class Simulator {
 			Clock.incrementClock();
 			processor.getRWUnit().performRW();
 			Clock.incrementClock();
+			for(int i = 0; i < 32; i++)
+			{
+				System.out.print("register " + i +" : ");
+				System.out.println(processor.getRegisterFile().getValue(i));
+			}
+			// System.out.println(processor.getMainMemory().getContentsAsString(0, 29));
 		}
 		
 		// TODO
