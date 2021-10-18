@@ -4,10 +4,10 @@ public class MA_RW_LatchType {
 	
 	boolean RW_enable;
 	int rs1, rs2, rd;
-	int op2;
-	int op1;
 	int aluResult;
 	int opcode;
+	boolean nop;
+	int loadResult;
 	
 	public MA_RW_LatchType()
 	{
@@ -33,16 +33,6 @@ public class MA_RW_LatchType {
 		this.rd = rd;
 	}
 
-	public void setOp2(int op2)
-	{
-		this.op2 = op2;
-	}
-
-	public void setOp1(int op1)
-	{
-		this.op1 = op1;
-	}
-
 	public void setAluResult(int aluResult)
 	{
 		this.aluResult = aluResult;
@@ -53,15 +43,14 @@ public class MA_RW_LatchType {
 		this.opcode = opcode;
 	}
 
-
-	public int getOp2()
+	public void setNop(boolean nop)
 	{
-		return op2;
+		this.nop = nop;
 	}
 
-	public int getOp1()
+	public void setLoadResult(int loadResult)
 	{
-		return op1;
+		this.loadResult = loadResult;
 	}
 
 	public int getAluResult()
@@ -89,8 +78,18 @@ public class MA_RW_LatchType {
 		return this.rd;
 	}
 
+	public boolean getNop()
+	{
+		return this.nop;
+	}
+
 	public void setRW_enable(boolean rW_enable) {
 		RW_enable = rW_enable;
+	}
+
+	public int getLoadResult()
+	{
+		return this.loadResult;
 	}
 
 }
