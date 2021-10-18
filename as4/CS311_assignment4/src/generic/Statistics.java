@@ -5,8 +5,11 @@ import java.io.PrintWriter;
 public class Statistics {
 	
 	// TODO add your statistics here
-	static long numberOfInstructions;
-	static long numberOfCycles;
+	static int numberOfInstructions;
+	static int numberOfOFStageInstructions;
+	static int numberOfCycles;
+	static int numberOfBranchTaken;
+	static int numberOfRegisterWriteInstructions;
 	
 
 	public static void printStatistics(String statFile)
@@ -29,11 +32,11 @@ public class Statistics {
 	}
 	
 	// TODO write functions to update statistics
-	public static void setNumberOfInstructions(long numberOfInstructions) {
+	public static void setNumberOfInstructions(int numberOfInstructions) {
 		Statistics.numberOfInstructions = numberOfInstructions;
 	}
 
-	public static void setNumberOfCycles(long numberOfCycles) {
+	public static void setNumberOfCycles(int numberOfCycles) {
 		Statistics.numberOfCycles = numberOfCycles;
 	}
 
