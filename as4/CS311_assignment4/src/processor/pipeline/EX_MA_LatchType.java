@@ -4,10 +4,9 @@ public class EX_MA_LatchType {
 	
 	boolean MA_enable;
 	int rs1, rs2, rd;
-	int op2;
-	int op1;
 	int aluResult;
 	int opcode;
+	boolean nop;
 	
 	public EX_MA_LatchType()
 	{
@@ -29,16 +28,6 @@ public class EX_MA_LatchType {
 		this.rd = rd;
 	}
 
-	public void setOp2(int op2)
-	{
-		this.op2 = op2;
-	}
-
-	public void setOp1(int op1)
-	{
-		this.op1 = op1;
-	}
-
 	public void setAluResult(int aluResult)
 	{
 		this.aluResult = aluResult;
@@ -49,18 +38,13 @@ public class EX_MA_LatchType {
 		this.opcode = opcode;
 	}
 
+	public void setNop(boolean nop)
+	{
+		this.nop = nop;
+	}
+
 	public boolean isMA_enable() {
 		return MA_enable;
-	}
-
-	public int getOp2()
-	{
-		return op2;
-	}
-
-	public int getOp1()
-	{
-		return op1;
 	}
 
 	public int getAluResult()
@@ -92,4 +76,8 @@ public class EX_MA_LatchType {
 		MA_enable = mA_enable;
 	}
 
+	public boolean getNop()
+	{
+		return this.nop;
+	}
 }
