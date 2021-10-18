@@ -9,6 +9,7 @@ public class OF_EX_LatchType {
 	int op2;
 	int imm;
 	int opcode;
+	boolean nop;
 	
 	public OF_EX_LatchType()
 	{
@@ -63,6 +64,11 @@ public class OF_EX_LatchType {
 		this.opcode = opcode;
 	}
 
+	public void setNop(boolean nop)
+	{
+		this.nop = nop;
+	}
+
 	public int getBranchTarget()
 	{
 		return branchTarget;
@@ -101,5 +107,10 @@ public class OF_EX_LatchType {
 	public int getRd()
 	{
 		return this.rd;
+	}
+
+	public boolean getNop()
+	{
+		return nop;
 	}
 }

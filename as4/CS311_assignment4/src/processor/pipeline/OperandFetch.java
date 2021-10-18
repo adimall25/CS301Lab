@@ -2,10 +2,18 @@ package processor.pipeline;
 
 import processor.Processor;
 
+import javax.lang.model.util.ElementScanner6;
+
+import generic.Statistics;
+
+
 public class OperandFetch {
 	Processor containingProcessor;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
+	EX_MA_LatchType EX_MA_Latch;
+	MA_RW_LatchType MA_RW_Latch;
+	IF_EnableLatchType IF_EnableLatch;
 
 	static String findTwoscomplement(StringBuffer str)
     {
@@ -48,6 +56,34 @@ public class OperandFetch {
 
 		return null;
 	}
+
+	boolean isConflict(int latch_opcode, int latch_rd, int rs1, int rs2)
+	{
+		if(rs1 == 31 || rs2 == 31)
+		{
+			if(latch_opcode == 6 || latch_opcode == 7)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			if(latch_opcode <= 22)
+			{
+				if(latch_rd == rs1 || latch_rd == rs2)return true;
+			}
+			else return false;
+			return false;
+		}
+		return false;
+	}
+
+	public void setBubble()
+	{
+		IF_EnableLatch.setIF_enable(false);
+		OF_EX_Latch.setNop(true);
+	}
+
 	int bitExtracted(int number, int k, int p, int signed)
 	{
 		String temp=  toBinary(number, 32);
@@ -70,11 +106,13 @@ public class OperandFetch {
 
 	
 	
-	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch)
-	{
+	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, MA_RW_LatchType mA_RW_Latch, IF_EnableLatchType iF_EnableLatch) {
 		this.containingProcessor = containingProcessor;
 		this.IF_OF_Latch = iF_OF_Latch;
 		this.OF_EX_Latch = oF_EX_Latch;
+		this.EX_MA_Latch = eX_MA_Latch;
+		this.MA_RW_Latch = mA_RW_Latch;
+		this.IF_EnableLatch = iF_EnableLatch;
 	}
 	
 	public void performOF()
@@ -82,13 +120,30 @@ public class OperandFetch {
 		if(IF_OF_Latch.isOF_enable())
 		{
 			//TODO
+			Statistics.setNumberOfOFInstructions(Statistics.getNumberOfOFInstructions() + 1);
 			int instruction = IF_OF_Latch.getInstruction();
 			int opcode = bitExtracted(instruction, 5, 1, 0);
 			int immediate = 0;
 			int branchTarget = 0;
+			boolean conflict = false;
 			// System.out.println(instruction);
 			System.out.print("opcode : ");
 			System.out.println(opcode);
+
+			int ex_opcode = OF_EX_Latch.getOpcode(), ex_rs1 = OF_EX_Latch.getRs1();
+			int ex_rs2 = OF_EX_Latch.getRs2(), ex_rd = OF_EX_Latch.getRd(), ex_imm = OF_EX_Latch.getImm();
+
+			int ma_opcode = OF_EX_Latch.getOpcode(), ma_rs1 = OF_EX_Latch.getRs1();
+			int ma_rs2 = OF_EX_Latch.getRs2(), ma_rd = OF_EX_Latch.getRd(), ma_imm = OF_EX_Latch.getImm();
+
+			int rw_opcode = OF_EX_Latch.getOpcode(), rw_rs1 = OF_EX_Latch.getRs1();
+			int rw_rs2 = OF_EX_Latch.getRs2(), rw_rd = OF_EX_Latch.getRd(), rw_imm = OF_EX_Latch.getImm();
+
+			if(opcode >= 24 && opcode <= 28)
+			{
+				IF_EnableLatch.setIF_enable(false);
+			}
+
 
 			int rs1 = 0, rs2 = 0, rd = 0;
 			if(opcode <= 21 && opcode % 2 == 1)
@@ -104,11 +159,19 @@ public class OperandFetch {
 				System.out.println(immediate);
 
 			}
-			else if(opcode <= 21 && opcode % 2 == 0)
+			else if(opcode <= 21 && opcode % 2 == 0)	//r3 type
 			{
 				rs1 = bitExtracted(instruction, 5, 6, 0);
 				rs2 = bitExtracted(instruction, 5, 11, 0);
 				rd = bitExtracted(instruction, 5, 16, 0);
+				if(isConflict(ex_opcode, ex_rd, rs1, rs2))conflict = true;
+				if(isConflict(ma_opcode, ma_rd, rs1, rs2))conflict = true;
+				if(isConflict(rw_opcode, rw_rd, rs1, rs2))conflict = true;
+
+				if(conflict)
+				{
+					setBubble();
+				}
 				System.out.print("rs1 : ");
 				System.out.println(rs1);
 				System.out.print("rs2 : ");
@@ -121,6 +184,7 @@ public class OperandFetch {
 			{
 				rd = bitExtracted(instruction, 5, 6, 0);
 				immediate = bitExtracted(instruction, 22, 11, 1);
+				// either one of these will be zero
 				System.out.print("rd : ");
 				System.out.println(rd);
 				System.out.print("immediate : ");
@@ -128,13 +192,20 @@ public class OperandFetch {
 			}
 			else if(opcode == 29)	//end
 			{
-				//nothing
+				IF_EnableLatch.setIF_enable(false);
 			}
-			else
+			else if(opcode >= 25 || opcode <= 28)	//beq, bgt, blt, bne
 			{
 				rs1 = bitExtracted(instruction, 5, 6, 0);
 				rd = bitExtracted(instruction, 5, 11, 0);
 				immediate = bitExtracted(instruction, 17, 16, 1);
+				if(isConflict(ex_opcode, ex_rd, rs1, rd))conflict = true;
+				if(isConflict(ma_opcode, ma_rd, rs1, rd))conflict = true;
+				if(isConflict(rw_opcode, rw_rd, rs1, rd))conflict = true;
+				if(conflict)
+				{
+					setBubble();
+				}
 				System.out.print("rs1 : ");
 				System.out.println(rs1);
 				System.out.print("rd : ");
@@ -142,33 +213,42 @@ public class OperandFetch {
 				System.out.print("immediate : ");
 				System.out.println(immediate);
 			}
-			int op1 = containingProcessor.getRegisterFile().getValue(rs1);
-			int op2 = 0;
-			
-			if(opcode == 23 || (opcode  >= 25 && opcode <= 28))	//store command
+			else 	//simple R2I type, load and store
 			{
-				op2 = containingProcessor.getRegisterFile().getValue(rd);
-			}
-			else
-			{
-				op2 = containingProcessor.getRegisterFile().getValue(rs2);
-			}
-			if(opcode >= 24 && opcode <= 28)
-			{
-				branchTarget = containingProcessor.getRegisterFile().getProgramCounter() + immediate;
-			}
+				rs1 = bitExtracted(instruction, 5, 6, 0);
+				rd = bitExtracted(instruction, 5, 11, 0);
+				immediate = bitExtracted(instruction, 17, 16, 1);
 
+				if(opcode == 22)
+				{
+					if(isConflict(ex_opcode, ex_rd, rs1, rs1))conflict = true;
+					if(isConflict(ma_opcode, ma_rd, rs1, rs1))conflict = true;
+					if(isConflict(rw_opcode, rw_rd, rs1, rs1))conflict = true;
+				}
+				else if(opcode == 23)
+				{
+					if(isConflict(ex_opcode, ex_rd, rd, rd))conflict = true;
+					if(isConflict(ma_opcode, ma_rd, rd, rd))conflict = true;
+					if(isConflict(rw_opcode, rw_rd, rd, rd))conflict = true;
+				}
+				else
+				{
+					if(isConflict(ex_opcode, ex_rd, rs1, rs1))conflict = true;
+					if(isConflict(ma_opcode, ma_rd, rs1, rs1))conflict = true;
+					if(isConflict(rw_opcode, rw_rd, rs1, rs1))conflict = true;
+				}
+				if(conflict)
+				{
+					setBubble();
+				}
+			}
 			
 			//set data on latch
 			OF_EX_Latch.setRs1(rs1);
 			OF_EX_Latch.setRs2(rs2);
 			OF_EX_Latch.setRd(rd);
 			OF_EX_Latch.setOpcode(opcode);
-			OF_EX_Latch.setBranchTarget(branchTarget);
-			OF_EX_Latch.setOp1(op1);
-			OF_EX_Latch.setOp2(op2);
 			OF_EX_Latch.setImm(immediate);
-			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
 		}
 	}
