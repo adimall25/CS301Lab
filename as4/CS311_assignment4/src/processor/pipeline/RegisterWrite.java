@@ -21,7 +21,9 @@ public class RegisterWrite {
 	
 	public void performRW()
 	{
+		System.out.println("---------------------Register writeback-------------------------");
 		if (MA_RW_Latch.getNop()) {
+			System.out.println("nop");
 			MA_RW_Latch.setNop(false);
 		}
 		else if(MA_RW_Latch.isRW_enable())
@@ -31,11 +33,23 @@ public class RegisterWrite {
 			// if instruction being processed is an end instruction, remember to call Simulator.setSimulationComplete(true);
 			Statistics.setnumberOfRegisterWriteInstructions(Statistics.getNumberOfRegisterWriteInstructions() + 1);
 			int opcode = MA_RW_Latch.getOpcode();
+			if(opcode == -1)return;
 			int aluResult = MA_RW_Latch.getAluResult();
 			int loadResult = MA_RW_Latch.getLoadResult();
 			int rs1 = MA_RW_Latch.getRs1();
 			int rs2 = MA_RW_Latch.getRs2();
 			int rd = MA_RW_Latch.getRd();
+			// System.out.println("----------------------------------------------");
+			System.out.print("RW PC : ");
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
 
 			if(opcode == 29)
 			{

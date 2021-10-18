@@ -18,18 +18,46 @@ public class MemoryAccess {
 	
 	public void performMA()
 	{
+		System.out.println("---------------------Memory Access-------------------------");
 		//TODO
 		if (EX_MA_Latch.getNop()) 
 		{
+			System.out.println("nop");
 			MA_RW_Latch.setNop(true);
 			EX_MA_Latch.setNop(false);
+			MA_RW_Latch.setNull();
+			int opcode = MA_RW_Latch.getOpcode();
+			int rs1 = MA_RW_Latch.getRs1();
+			int rs2 = MA_RW_Latch.getRs2();
+			int rd = MA_RW_Latch.getRd();
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
 		}
 		else if(EX_MA_Latch.isMA_enable())
 		{
 			//fetch data from latch
 			int rs1 = EX_MA_Latch.getRs1(), rs2 = EX_MA_Latch.getRs2(), rd = EX_MA_Latch.getRd();
 			int opcode = EX_MA_Latch.getOpcode();
+			if(opcode == -1)return;
 			int aluResult = EX_MA_Latch.getAluResult();
+			// System.out.println("----------------------------------------------");
+			System.out.print("MA PC : ");
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
 
 			if(opcode == 22)	//if load
 			{

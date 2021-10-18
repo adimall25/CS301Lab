@@ -11,6 +11,19 @@ public class EX_MA_LatchType {
 	public EX_MA_LatchType()
 	{
 		MA_enable = false;
+		nop = false;
+		rs1 = -1;
+		rs2 = -1;
+		rd = -1;
+		opcode = -1;
+	}
+
+	public void setNull()
+	{
+		rs1 = -1;
+		rs2 = -1;
+		rd = -1;
+		opcode = -1;
 	}
 
 	public void setRs1(int rs1)

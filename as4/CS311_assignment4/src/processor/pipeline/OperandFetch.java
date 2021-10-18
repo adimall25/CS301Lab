@@ -70,6 +70,7 @@ public class OperandFetch {
 		{
 			if(latch_opcode <= 22)
 			{
+				System.out.println("rd : " + latch_rd + ", rs1 : " + rs1 + ", rs2 : " + rs2);
 				if(latch_rd == rs1 || latch_rd == rs2)return true;
 			}
 			else return false;
@@ -82,6 +83,20 @@ public class OperandFetch {
 	{
 		IF_EnableLatch.setIF_enable(false);
 		OF_EX_Latch.setNop(true);
+		OF_EX_Latch.setNull();
+		int opcode = OF_EX_Latch.getOpcode();
+		int rs1 = OF_EX_Latch.getRs1();
+		int rs2 = OF_EX_Latch.getRs2();
+		int rd = OF_EX_Latch.getRd();
+		System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+		System.out.print("opcode : ");
+		System.out.println(opcode);
+		System.out.print("rs1 : ");
+		System.out.println(rs1);
+		System.out.print("rs2 : ");
+		System.out.println(rs2);
+		System.out.print("rd : ");
+		System.out.println(rd);
 	}
 
 	int bitExtracted(int number, int k, int p, int signed)
@@ -117,14 +132,17 @@ public class OperandFetch {
 	
 	public void performOF()
 	{
+		System.out.println("---------------------Operand Fetch-------------------------");
+
 		if(IF_OF_Latch.isOF_enable())
 		{
 			//TODO
 			Statistics.setNumberOfOFInstructions(Statistics.getNumberOfOFInstructions() + 1);
+			System.out.print("OF PC : ");
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
 			int instruction = IF_OF_Latch.getInstruction();
 			int opcode = bitExtracted(instruction, 5, 1, 0);
 			int immediate = 0;
-			int branchTarget = 0;
 			boolean conflict = false;
 			// System.out.println(instruction);
 			System.out.print("opcode : ");
@@ -146,11 +164,19 @@ public class OperandFetch {
 
 
 			int rs1 = 0, rs2 = 0, rd = 0;
-			if(opcode <= 21 && opcode % 2 == 1)
+			if(opcode <= 21 && opcode % 2 == 1)	//simple R2I type
 			{
 				rs1 = bitExtracted(instruction, 5, 6, 0);
 				rd = bitExtracted(instruction, 5, 11, 0);
 				immediate = bitExtracted(instruction, 17, 16, 1);
+				if(isConflict(ex_opcode, ex_rd, rs1, rs1))conflict = true;
+				if(isConflict(ma_opcode, ma_rd, rs1, rs1))conflict = true;
+				if(isConflict(rw_opcode, rw_rd, rs1, rs1))conflict = true;
+				if(conflict)
+				{
+					setBubble();
+					return;
+				}
 				System.out.print("rs1 : ");
 				System.out.println(rs1);
 				System.out.print("rd : ");
@@ -171,6 +197,7 @@ public class OperandFetch {
 				if(conflict)
 				{
 					setBubble();
+					return;
 				}
 				System.out.print("rs1 : ");
 				System.out.println(rs1);
@@ -205,6 +232,7 @@ public class OperandFetch {
 				if(conflict)
 				{
 					setBubble();
+					return;
 				}
 				System.out.print("rs1 : ");
 				System.out.println(rs1);
@@ -213,7 +241,7 @@ public class OperandFetch {
 				System.out.print("immediate : ");
 				System.out.println(immediate);
 			}
-			else 	//simple R2I type, load and store
+			else 	// load and store
 			{
 				rs1 = bitExtracted(instruction, 5, 6, 0);
 				rd = bitExtracted(instruction, 5, 11, 0);
@@ -231,17 +259,15 @@ public class OperandFetch {
 					if(isConflict(ma_opcode, ma_rd, rd, rd))conflict = true;
 					if(isConflict(rw_opcode, rw_rd, rd, rd))conflict = true;
 				}
-				else
-				{
-					if(isConflict(ex_opcode, ex_rd, rs1, rs1))conflict = true;
-					if(isConflict(ma_opcode, ma_rd, rs1, rs1))conflict = true;
-					if(isConflict(rw_opcode, rw_rd, rs1, rs1))conflict = true;
-				}
+				else;
 				if(conflict)
 				{
 					setBubble();
+					// System.out.println("Bubble set");
+					return;
 				}
 			}
+			if(!conflict)IF_EnableLatch.setIF_enable(true);
 			
 			//set data on latch
 			OF_EX_Latch.setRs1(rs1);
@@ -250,6 +276,20 @@ public class OperandFetch {
 			OF_EX_Latch.setOpcode(opcode);
 			OF_EX_Latch.setImm(immediate);
 			OF_EX_Latch.setEX_enable(true);
+
+			opcode = OF_EX_Latch.getOpcode();
+			rs1 = OF_EX_Latch.getRs1();
+			rs2 = OF_EX_Latch.getRs2();
+			rd = OF_EX_Latch.getRd();
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
 		}
 	}
 

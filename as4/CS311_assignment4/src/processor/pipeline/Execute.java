@@ -24,18 +24,48 @@ public class Execute {
 	public void performEX()
 	{
 		//TODO
+		System.out.println("---------------------Execution-------------------------");
 
 		if(OF_EX_Latch.getNop())
 		{
+			System.out.println("nop");
 			EX_MA_Latch.setNop(true);
 			OF_EX_Latch.setNop(false);
+			EX_MA_Latch.setNull();
+			int opcode = EX_MA_Latch.getOpcode();
+			int rs1 = EX_MA_Latch.getRs1();
+			int rs2 = EX_MA_Latch.getRs2();
+			int rd = EX_MA_Latch.getRd();
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
+
 		}
 		else if(OF_EX_Latch.isEX_enable())
 		{
+			System.out.print("Execute PC : ");
+			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
 			int rs1 = OF_EX_Latch.getRs1(), rs2 = OF_EX_Latch.getRs2(), rd = OF_EX_Latch.getRd();
 			int imm = OF_EX_Latch.getImm();
 			int opcode = OF_EX_Latch.getOpcode();
+			if(opcode == -1)return;
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter() - 1;
+			System.out.print("opcode : ");
+			System.out.println(opcode);
+			System.out.print("rs1 : ");
+			System.out.println(rs1);
+			System.out.print("rs2 : ");
+			System.out.println(rs2);
+			System.out.print("rd : ");
+			System.out.println(rd);
+			System.out.print("immediate : ");
+			System.out.println(imm);
 
 			if(opcode <= 29 && opcode >= 24)	//branching and end
 			{
