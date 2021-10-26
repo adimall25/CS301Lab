@@ -32,19 +32,19 @@ public class Execute {
 			EX_MA_Latch.setNop(true);
 			OF_EX_Latch.setNop(false);
 			EX_MA_Latch.setNull();
-			int opcode = EX_MA_Latch.getOpcode();
-			int rs1 = EX_MA_Latch.getRs1();
-			int rs2 = EX_MA_Latch.getRs2();
-			int rd = EX_MA_Latch.getRd();
-			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
-			System.out.print("opcode : ");
-			System.out.println(opcode);
-			System.out.print("rs1 : ");
-			System.out.println(rs1);
-			System.out.print("rs2 : ");
-			System.out.println(rs2);
-			System.out.print("rd : ");
-			System.out.println(rd);
+			// int opcode = EX_MA_Latch.getOpcode();
+			// int rs1 = EX_MA_Latch.getRs1();
+			// int rs2 = EX_MA_Latch.getRs2();
+			// int rd = EX_MA_Latch.getRd();
+			// System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			// System.out.print("opcode : ");
+			// System.out.println(opcode);
+			// System.out.print("rs1 : ");
+			// System.out.println(rs1);
+			// System.out.print("rs2 : ");
+			// System.out.println(rs2);
+			// System.out.print("rd : ");
+			// System.out.println(rd);
 
 		}
 		else if(OF_EX_Latch.isEX_enable())
@@ -231,6 +231,7 @@ public class Execute {
 				}
 			}
 			else;
+			if(opcode == 29)OF_EX_Latch.setEX_enable(false);
 			
 			//set data from this stage to the next latch
 			EX_MA_Latch.setAluResult(alu);
@@ -238,6 +239,7 @@ public class Execute {
 			EX_MA_Latch.setOpcode(opcode);
 			EX_MA_Latch.setRs1(rs1);
 			EX_MA_Latch.setRs2(rs2);
+			EX_MA_Latch.setImm(imm);
 			EX_MA_Latch.setRd(rd);
 			
 		}

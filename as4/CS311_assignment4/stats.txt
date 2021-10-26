@@ -1,2 +1,2 @@
-Number of instructions executed = 83
-Number of cycles taken = 83
+Number of instructions executed = 92
+Number of cycles taken = 92

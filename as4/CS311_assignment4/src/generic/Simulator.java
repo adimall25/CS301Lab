@@ -82,6 +82,7 @@ public class Simulator {
 			Clock.incrementClock();
 			processor.getIFUnit().performIF();
 			Clock.incrementClock();
+			System.out.println(processor.getRegisterFile().getContentsAsString());
 			Statistics.setNumberOfInstructions(Statistics.getNumberOfInstructions() + 1);
 			Statistics.setNumberOfCycles(Statistics.getNumberOfCycles() + 1);
 		}
@@ -91,6 +92,7 @@ public class Simulator {
 		System.out.println("Number of cycles : " + Statistics.getNumberOfCycles());
 		System.out.println("Number of OF stalls : " + (Statistics.getNumberOfInstructions() - Statistics.getNumberOfRegisterWriteInstructions()));
 		System.out.println("Number of incorrect branch instructions : " + Statistics.getNumberOfBranchTaken());
+		// processor.getRegisterFile().getContentsAsString();
 	}
 	
 	public static void setSimulationComplete(boolean value)

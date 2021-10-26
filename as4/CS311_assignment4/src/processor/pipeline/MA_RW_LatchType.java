@@ -7,6 +7,8 @@ public class MA_RW_LatchType {
 	int aluResult;
 	int opcode;
 	boolean nop;
+	int imm;
+
 	int loadResult;
 	
 	public MA_RW_LatchType()
@@ -18,7 +20,10 @@ public class MA_RW_LatchType {
 		rd = -1;
 		opcode = -1;
 	}
-
+	public void setImm(int imm)
+	{
+		this.imm = imm;
+	}
 	public void setNull()
 	{
 		rs1 = -1;
@@ -26,6 +31,11 @@ public class MA_RW_LatchType {
 		rd = -1;
 		opcode = -1;
 	}
+	public int getImm()
+	{
+		return this.imm;
+	}
+	
 
 	public boolean isRW_enable() {
 		return RW_enable;

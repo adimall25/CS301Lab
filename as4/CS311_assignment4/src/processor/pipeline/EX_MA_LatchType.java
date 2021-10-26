@@ -6,6 +6,7 @@ public class EX_MA_LatchType {
 	int rs1, rs2, rd;
 	int aluResult;
 	int opcode;
+	int imm;
 	boolean nop;
 	
 	public EX_MA_LatchType()
@@ -24,6 +25,11 @@ public class EX_MA_LatchType {
 		rs2 = -1;
 		rd = -1;
 		opcode = -1;
+	}
+
+	public void setImm(int imm)
+	{
+		this.imm = imm;
 	}
 
 	public void setRs1(int rs1)
@@ -85,6 +91,11 @@ public class EX_MA_LatchType {
 		return this.rd;
 	}
 
+	public int getImm()
+	{
+		return this.imm;
+	}
+	
 	public void setMA_enable(boolean mA_enable) {
 		MA_enable = mA_enable;
 	}

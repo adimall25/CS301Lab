@@ -26,25 +26,26 @@ public class MemoryAccess {
 			MA_RW_Latch.setNop(true);
 			EX_MA_Latch.setNop(false);
 			MA_RW_Latch.setNull();
-			int opcode = MA_RW_Latch.getOpcode();
-			int rs1 = MA_RW_Latch.getRs1();
-			int rs2 = MA_RW_Latch.getRs2();
-			int rd = MA_RW_Latch.getRd();
-			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
-			System.out.print("opcode : ");
-			System.out.println(opcode);
-			System.out.print("rs1 : ");
-			System.out.println(rs1);
-			System.out.print("rs2 : ");
-			System.out.println(rs2);
-			System.out.print("rd : ");
-			System.out.println(rd);
+			// int opcode = MA_RW_Latch.getOpcode();
+			// int rs1 = MA_RW_Latch.getRs1();
+			// int rs2 = MA_RW_Latch.getRs2();
+			// int rd = MA_RW_Latch.getRd();
+			// System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			// System.out.print("opcode : ");
+			// System.out.println(opcode);
+			// System.out.print("rs1 : ");
+			// System.out.println(rs1);
+			// System.out.print("rs2 : ");
+			// System.out.println(rs2);
+			// System.out.print("rd : ");
+			// System.out.println(rd);
 		}
 		else if(EX_MA_Latch.isMA_enable())
 		{
 			//fetch data from latch
 			int rs1 = EX_MA_Latch.getRs1(), rs2 = EX_MA_Latch.getRs2(), rd = EX_MA_Latch.getRd();
 			int opcode = EX_MA_Latch.getOpcode();
+			int imm = EX_MA_Latch.getImm();
 			if(opcode == -1)return;
 			int aluResult = EX_MA_Latch.getAluResult();
 			// System.out.println("----------------------------------------------");
@@ -71,12 +72,13 @@ public class MemoryAccess {
 			{
 				IF_EnableLatch.setIF_enable(false);
 			}
-
+			if(opcode == 29)EX_MA_Latch.setMA_enable(false);
 			MA_RW_Latch.setOpcode(opcode);
 			MA_RW_Latch.setAluResult(aluResult);
 			MA_RW_Latch.setRs1(rs1);
 			MA_RW_Latch.setRs2(rs2);
 			MA_RW_Latch.setRd(rd);
+			MA_RW_Latch.setImm(imm);
 			MA_RW_Latch.setRW_enable(true);
 		}
 	}

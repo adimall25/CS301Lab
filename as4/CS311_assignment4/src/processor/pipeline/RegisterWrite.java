@@ -25,6 +25,7 @@ public class RegisterWrite {
 		if (MA_RW_Latch.getNop()) {
 			System.out.println("nop");
 			MA_RW_Latch.setNop(false);
+			IF_EnableLatch.setIF_enable(true);
 		}
 		else if(MA_RW_Latch.isRW_enable())
 		{
@@ -39,6 +40,7 @@ public class RegisterWrite {
 			int rs1 = MA_RW_Latch.getRs1();
 			int rs2 = MA_RW_Latch.getRs2();
 			int rd = MA_RW_Latch.getRd();
+			int imm = MA_RW_Latch.getImm();
 			// System.out.println("----------------------------------------------");
 			System.out.print("RW PC : ");
 			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
@@ -53,6 +55,7 @@ public class RegisterWrite {
 
 			if(opcode == 29)
 			{
+				MA_RW_Latch.setRW_enable(false);
 				Simulator.setSimulationComplete(true);
 			}
 			else if(opcode == 22)
@@ -61,6 +64,17 @@ public class RegisterWrite {
 			}			
 			else if(opcode <= 21)
 			{
+				if(opcode == 6)
+				{
+					int rs1Val = containingProcessor.getRegisterFile().getValue(rs1);
+					int rs2Val = containingProcessor.getRegisterFile().getValue(rs2);
+					containingProcessor.getRegisterFile().setValue(31, rs1Val % rs2Val);
+				}
+				if(opcode == 7)
+				{
+					int rs1Val = containingProcessor.getRegisterFile().getValue(rs1);
+					containingProcessor.getRegisterFile().setValue(31, rs1Val % imm);
+				}
 				containingProcessor.getRegisterFile().setValue(rd, aluResult);
 			}
 			else;

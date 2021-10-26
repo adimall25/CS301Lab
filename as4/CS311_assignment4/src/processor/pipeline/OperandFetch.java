@@ -59,6 +59,7 @@ public class OperandFetch {
 
 	boolean isConflict(int latch_opcode, int latch_rd, int rs1, int rs2)
 	{
+		if(latch_opcode == -1)return false;
 		if(rs1 == 31 || rs2 == 31)
 		{
 			if(latch_opcode == 6 || latch_opcode == 7)
@@ -84,19 +85,19 @@ public class OperandFetch {
 		IF_EnableLatch.setIF_enable(false);
 		OF_EX_Latch.setNop(true);
 		OF_EX_Latch.setNull();
-		int opcode = OF_EX_Latch.getOpcode();
-		int rs1 = OF_EX_Latch.getRs1();
-		int rs2 = OF_EX_Latch.getRs2();
-		int rd = OF_EX_Latch.getRd();
-		System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
-		System.out.print("opcode : ");
-		System.out.println(opcode);
-		System.out.print("rs1 : ");
-		System.out.println(rs1);
-		System.out.print("rs2 : ");
-		System.out.println(rs2);
-		System.out.print("rd : ");
-		System.out.println(rd);
+		// int opcode = OF_EX_Latch.getOpcode();
+		// int rs1 = OF_EX_Latch.getRs1();
+		// int rs2 = OF_EX_Latch.getRs2();
+		// int rd = OF_EX_Latch.getRd();
+		// System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+		// System.out.print("opcode : ");
+		// System.out.println(opcode);
+		// System.out.print("rs1 : ");
+		// System.out.println(rs1);
+		// System.out.print("rs2 : ");
+		// System.out.println(rs2);
+		// System.out.print("rd : ");
+		// System.out.println(rd);
 	}
 
 	int bitExtracted(int number, int k, int p, int signed)
@@ -151,11 +152,11 @@ public class OperandFetch {
 			int ex_opcode = OF_EX_Latch.getOpcode(), ex_rs1 = OF_EX_Latch.getRs1();
 			int ex_rs2 = OF_EX_Latch.getRs2(), ex_rd = OF_EX_Latch.getRd(), ex_imm = OF_EX_Latch.getImm();
 
-			int ma_opcode = OF_EX_Latch.getOpcode(), ma_rs1 = OF_EX_Latch.getRs1();
-			int ma_rs2 = OF_EX_Latch.getRs2(), ma_rd = OF_EX_Latch.getRd(), ma_imm = OF_EX_Latch.getImm();
+			int ma_opcode = EX_MA_Latch.getOpcode(), ma_rs1 = EX_MA_Latch.getRs1();
+			int ma_rs2 = EX_MA_Latch.getRs2(), ma_rd = EX_MA_Latch.getRd();
 
-			int rw_opcode = OF_EX_Latch.getOpcode(), rw_rs1 = OF_EX_Latch.getRs1();
-			int rw_rs2 = OF_EX_Latch.getRs2(), rw_rd = OF_EX_Latch.getRd(), rw_imm = OF_EX_Latch.getImm();
+			int rw_opcode = MA_RW_Latch.getOpcode(), rw_rs1 = MA_RW_Latch.getRs1();
+			int rw_rs2 = MA_RW_Latch.getRs2(), rw_rd = MA_RW_Latch.getRd();
 
 			if(opcode >= 24 && opcode <= 28)
 			{
@@ -267,7 +268,7 @@ public class OperandFetch {
 					return;
 				}
 			}
-			if(!conflict)IF_EnableLatch.setIF_enable(true);
+			if(!conflict && opcode != 29)IF_EnableLatch.setIF_enable(true);
 			
 			//set data on latch
 			OF_EX_Latch.setRs1(rs1);
@@ -277,19 +278,19 @@ public class OperandFetch {
 			OF_EX_Latch.setImm(immediate);
 			OF_EX_Latch.setEX_enable(true);
 
-			opcode = OF_EX_Latch.getOpcode();
-			rs1 = OF_EX_Latch.getRs1();
-			rs2 = OF_EX_Latch.getRs2();
-			rd = OF_EX_Latch.getRd();
-			System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
-			System.out.print("opcode : ");
-			System.out.println(opcode);
-			System.out.print("rs1 : ");
-			System.out.println(rs1);
-			System.out.print("rs2 : ");
-			System.out.println(rs2);
-			System.out.print("rd : ");
-			System.out.println(rd);
+			// opcode = OF_EX_Latch.getOpcode();
+			// rs1 = OF_EX_Latch.getRs1();
+			// rs2 = OF_EX_Latch.getRs2();
+			// rd = OF_EX_Latch.getRd();
+			// System.out.println(containingProcessor.getRegisterFile().getProgramCounter() - 1);
+			// System.out.print("opcode : ");
+			// System.out.println(opcode);
+			// System.out.print("rs1 : ");
+			// System.out.println(rs1);
+			// System.out.print("rs2 : ");
+			// System.out.println(rs2);
+			// System.out.print("rd : ");
+			// System.out.println(rd);
 		}
 	}
 
